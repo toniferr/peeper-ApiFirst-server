@@ -1,0 +1,1825 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: email@email.com
+    url: https://toniferr.github.io/
+  description: |
+    This is an **example** API to demonstrate features of the OpenAPI specification.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://example.com/terms/
+  title: API First with Spring Boot
+  version: 1.0.0
+  x-logo:
+    url: https://redocly.github.io/openapi-template/logo.png
+servers:
+- url: "https://{tenant}/api/v1"
+  variables:
+    tenant:
+      default: www
+      description: Your tenant id
+- url: https://host/api/v1
+security:
+- basic_auth: []
+tags:
+- description: Customer operations
+  name: Customer
+- description: Product operations
+  name: Product
+- description: Operations about orders.
+  name: Order
+paths:
+  /v1/customers:
+    get:
+      description: Get a list of customers.
+      operationId: listCustomers
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer_list'
+          description: Success
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Get a list of customers
+      tags:
+      - Customer
+      x-accepts: application/json
+    post:
+      description: Create a new customer.
+      operationId: createCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customer'
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              description: The location of the new customer
+              explode: false
+              schema:
+                example: /v1/customers/27ca5995-f6e1-46bb-8f18-52458b7ed96e
+                format: uri
+                type: string
+              style: simple
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+      summary: Create a new customer
+      tags:
+      - Customer
+      x-content-type: application/json
+      x-accepts: application/problem+json
+  /v1/customers/{customerId}:
+    delete:
+      description: |
+        Delete a customer by ID
+      operationId: deleteCustomerById
+      parameters:
+      - description: The ID value of the customer. This value is a UUID.
+        explode: false
+        in: path
+        name: customerId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unable to complete request due to a conflict with the current
+            state of the target resource. May be due to constraint violation.
+      summary: Delete a customer by ID
+      tags:
+      - Customer
+      x-accepts: application/problem+json
+    get:
+      description: |
+        Get a customer by ID
+      operationId: getCustomerById
+      parameters:
+      - description: The ID value of the customer. This value is a UUID.
+        explode: false
+        in: path
+        name: customerId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer'
+          description: successful operation
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Get a customer by ID
+      tags:
+      - Customer
+      x-accepts: application/json
+    patch:
+      description: |
+        Patch a customer by ID
+      operationId: patchCustomerById
+      parameters:
+      - description: The ID value of the customer. This value is a UUID.
+        explode: false
+        in: path
+        name: customerId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customer_patch'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer'
+          description: successful operation
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Patch a customer by ID
+      tags:
+      - Customer
+      x-content-type: application/json
+      x-accepts: application/json
+    put:
+      description: |
+        Update a customer by ID
+      operationId: updateCustomerById
+      parameters:
+      - description: The ID value of the customer. This value is a UUID.
+        explode: false
+        in: path
+        name: customerId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customer'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer'
+          description: successful operation
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Update a customer by ID
+      tags:
+      - Customer
+      x-content-type: application/json
+      x-accepts: application/json
+  /v1/products:
+    get:
+      description: Get a list of product.
+      operationId: listProducts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product_list'
+          description: Success
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Get a list of products
+      tags:
+      - Product
+      x-accepts: application/json
+    post:
+      description: Create a new product.
+      operationId: createProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product_create'
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              description: Location of the new resource
+              explode: false
+              schema:
+                example: /v1/products/27ca5995-f6e1-46bb-8f18-52458b7ed96e
+                type: string
+              style: simple
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+      summary: Create a new product
+      tags:
+      - Product
+      x-content-type: application/json
+      x-accepts: application/problem+json
+  /v1/products/{productId}:
+    delete:
+      description: |
+        Delete Product by ID
+      operationId: deleteProductById
+      parameters:
+      - description: The ID of the product to retrieve
+        explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unable to complete request due to a conflict with the current
+            state of the target resource. May be due to constraint violation.
+      summary: Delete a product by ID
+      tags:
+      - Product
+      x-accepts: application/problem+json
+    get:
+      description: |
+        Get a product by ID
+      operationId: getProductById
+      parameters:
+      - description: The ID of the product to retrieve
+        explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+          description: successful operation
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Get a product by ID
+      tags:
+      - Product
+      x-accepts: application/json
+    patch:
+      description: |
+        Patch a product by ID
+      operationId: patchProductById
+      parameters:
+      - description: The ID of the product to update
+        explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product_patch'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+          description: successful operation
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Patch a product by ID
+      tags:
+      - Product
+      x-content-type: application/json
+      x-accepts: application/json
+    put:
+      description: |
+        Update a product by ID
+      operationId: updateProductById
+      parameters:
+      - description: The ID of the product to retrieve
+        explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product_update'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+          description: successful operation
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Update a product by ID
+      tags:
+      - Product
+      x-content-type: application/json
+      x-accepts: application/json
+  /v1/orders:
+    get:
+      description: List Orders
+      operationId: listOrders
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_list'
+          description: successful operation
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: List Orders
+      tags:
+      - Order
+      x-accepts: application/json
+    post:
+      description: Create Order
+      operationId: createOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order_create'
+      responses:
+        "201":
+          description: Order Created
+          headers:
+            Location:
+              description: Path to the created Order
+              example: /v1/orders/27ca5995-f6e1-46bb-8f18-52458b7ed96e
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+      summary: Create Order
+      tags:
+      - Order
+      x-content-type: application/json
+      x-accepts: application/problem+json
+  /v1/orders/{orderId}:
+    delete:
+      description: |
+        Patch a order by ID
+      operationId: deleteOrderById
+      parameters:
+      - description: The ID value of the order. This value is a UUID.
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Delete a order by ID
+      tags:
+      - Order
+      x-accepts: application/problem+json
+    get:
+      description: Get Order by id
+      operationId: getOrderById
+      parameters:
+      - description: The ID value of the order. This value is a UUID.
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+          description: successful operation
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Get Order by id
+      tags:
+      - Order
+      x-accepts: application/json
+    patch:
+      description: Patch Order
+      operationId: patchOrder
+      parameters:
+      - description: The ID value of the order. This value is a UUID.
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order_patch'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+          description: Order Updated
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Patch Order
+      tags:
+      - Order
+      x-content-type: application/json
+      x-accepts: application/json
+    put:
+      description: Update Order
+      operationId: updateOrder
+      parameters:
+      - description: The ID value of the order. This value is a UUID.
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order_update'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+          description: Order Updated
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: Update Order
+      tags:
+      - Order
+      x-content-type: application/json
+      x-accepts: application/json
+  /v1/categories:
+    get:
+      description: List Categories
+      operationId: listCategories
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category_list'
+          description: successful operation
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Request was received but was invalid. Check format and content
+            of the request.  See the problem detail for more information.
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: The requested resource was not found.
+      summary: List Categories
+      tags:
+      - Products
+      x-accepts: application/json
+components:
+  parameters:
+    customer_id:
+      description: The ID value of the customer. This value is a UUID.
+      explode: false
+      in: path
+      name: customerId
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+    product_id:
+      description: The ID of the product to retrieve
+      explode: false
+      in: path
+      name: productId
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+    order_id:
+      description: The ID value of the order. This value is a UUID.
+      explode: false
+      in: path
+      name: orderId
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+  responses:
+    not_found_404:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+      description: The requested resource was not found.
+    bad_request_400:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+      description: Request was received but was invalid. Check format and content
+        of the request.  See the problem detail for more information.
+    conflict_409:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+      description: Unable to complete request due to a conflict with the current state
+        of the target resource. May be due to constraint violation.
+  schemas:
+    uuid_id:
+      description: System generated unique identifier for the resource.
+      format: uuid
+      nullable: true
+      readOnly: true
+      type: string
+    name:
+      example:
+        firstName: John
+        lastName: Doe
+        prefix: Mr.
+        suffix: suffix
+      properties:
+        prefix:
+          description: Name Prefix
+          example: Mr.
+          maxLength: 25
+          minLength: 0
+          nullable: true
+          type: string
+        firstName:
+          description: First Name
+          example: John
+          maxLength: 100
+          minLength: 2
+          type: string
+        lastName:
+          description: Last Name
+          example: Doe
+          maxLength: 100
+          minLength: 2
+          type: string
+        suffix:
+          description: Name Suffix
+          maxLength: 25
+          minLength: 0
+          nullable: true
+          type: string
+      required:
+      - firstName
+      - lastName
+      type: object
+    iso_timestamp:
+      description: "ISO 8601 Timestamp. Date Created and Date Updated are system managed\
+        \ values, should not be sent in request payloads - will be ignored."
+      example: 2022-08-22T11:43:06-07:00
+      format: date-time
+      nullable: true
+      readOnly: true
+      title: ISO Timestamp
+      type: string
+    address:
+      example:
+        zip: "33701"
+        dateCreated: 2022-08-22T11:43:06-07:00
+        city: St Petersburg
+        addressLine1: 123 Main Street
+        addressLine2: addressLine2
+        id: null
+        state: FL
+        dateUpdated: 2022-08-22T11:43:06-07:00
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid_id'
+        addressLine1:
+          description: Address Line 1
+          example: 123 Main Street
+          maxLength: 100
+          minLength: 3
+          type: string
+        addressLine2:
+          description: Address Line 2
+          maxLength: 100
+          minLength: 3
+          nullable: true
+          type: string
+        city:
+          description: City
+          example: St Petersburg
+          maxLength: 100
+          minLength: 2
+          type: string
+        state:
+          description: 2 character state code
+          example: FL
+          maxLength: 2
+          minLength: 2
+          type: string
+        zip:
+          description: Zip Code
+          example: "33701"
+          maxLength: 10
+          minLength: 5
+          type: string
+        dateCreated:
+          $ref: '#/components/schemas/iso_timestamp'
+        dateUpdated:
+          $ref: '#/components/schemas/iso_timestamp'
+      required:
+      - addressLine1
+      - city
+      - state
+      - zip
+      type: object
+    payment_method:
+      example:
+        cvv: 123
+        dateCreated: 2022-08-22T11:43:06-07:00
+        displayName: My Chase Card
+        expiryMonth: 7
+        id: null
+        expiryYear: 26
+        cardNumber: 1234567890123456
+        dateUpdated: 2022-08-22T11:43:06-07:00
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid_id'
+        displayName:
+          example: My Chase Card
+          maxLength: 100
+          minLength: 2
+          type: string
+        cardNumber:
+          example: 1234567890123456
+          type: integer
+        expiryMonth:
+          example: 7
+          type: integer
+        expiryYear:
+          example: 26
+          type: integer
+        cvv:
+          example: 123
+          type: integer
+        dateCreated:
+          $ref: '#/components/schemas/iso_timestamp'
+        dateUpdated:
+          $ref: '#/components/schemas/iso_timestamp'
+      required:
+      - cardNumber
+      - cvv
+      - displayName
+      - expiryMonth
+      - expiryYear
+      type: object
+    customer:
+      example:
+        shipToAddress:
+          zip: "33701"
+          dateCreated: 2022-08-22T11:43:06-07:00
+          city: St Petersburg
+          addressLine1: 123 Main Street
+          addressLine2: addressLine2
+          id: null
+          state: FL
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        billToAddress:
+          zip: "33701"
+          dateCreated: 2022-08-22T11:43:06-07:00
+          city: St Petersburg
+          addressLine1: 123 Main Street
+          addressLine2: addressLine2
+          id: null
+          state: FL
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        dateCreated: 2022-08-22T11:43:06-07:00
+        phone: 800-555-1212
+        paymentMethods:
+        - cvv: 123
+          dateCreated: 2022-08-22T11:43:06-07:00
+          displayName: My Chase Card
+          expiryMonth: 7
+          id: null
+          expiryYear: 26
+          cardNumber: 1234567890123456
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        - cvv: 123
+          dateCreated: 2022-08-22T11:43:06-07:00
+          displayName: My Chase Card
+          expiryMonth: 7
+          id: null
+          expiryYear: 26
+          cardNumber: 1234567890123456
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        name:
+          firstName: John
+          lastName: Doe
+          prefix: Mr.
+          suffix: suffix
+        id: null
+        email: john@springframework.guru
+        dateUpdated: 2022-08-22T11:43:06-07:00
+      properties:
+        id:
+          description: System generated unique identifier for the resource.
+          format: uuid
+          nullable: true
+          readOnly: true
+          type: string
+        name:
+          $ref: '#/components/schemas/name'
+        shipToAddress:
+          $ref: '#/components/schemas/address'
+        billToAddress:
+          $ref: '#/components/schemas/address'
+        email:
+          example: john@springframework.guru
+          maxLength: 255
+          minLength: 3
+          nullable: true
+          type: string
+        phone:
+          example: 800-555-1212
+          maxLength: 15
+          minLength: 7
+          nullable: true
+          type: string
+        paymentMethods:
+          items:
+            $ref: '#/components/schemas/payment_method'
+          nullable: true
+          type: array
+        dateCreated:
+          description: "ISO 8601 Timestamp. Date Created and Date Updated are system\
+            \ managed values, should not be sent in request payloads - will be ignored."
+          example: 2022-08-22T11:43:06-07:00
+          format: date-time
+          nullable: true
+          readOnly: true
+          title: ISO Timestamp
+          type: string
+        dateUpdated:
+          description: "ISO 8601 Timestamp. Date Created and Date Updated are system\
+            \ managed values, should not be sent in request payloads - will be ignored."
+          example: 2022-08-22T11:43:06-07:00
+          format: date-time
+          nullable: true
+          readOnly: true
+          title: ISO Timestamp
+          type: string
+      required:
+      - billToAddress
+      - name
+      - shipToAddress
+      type: object
+    customer_list:
+      items:
+        $ref: '#/components/schemas/customer'
+      type: array
+    Problem:
+      additionalProperties: true
+      description: "The Problem Details JSON Object [[RFC7807](https://tools.ietf.org/html/rfc7807)]."
+      minProperties: 1
+      properties:
+        type:
+          description: "A URI reference [[RFC3986](https://tools.ietf.org/html/rfc3986)]\
+            \ that identifies the problem type. It should provide human-readable documentation\
+            \ for the problem type. When this member is not present, its value is\
+            \ assumed to be \"about:blank\"."
+          format: uri
+          type: string
+        title:
+          description: "A short, human-readable summary of the problem type. It SHOULD\
+            \ NOT change from occurrence to occurrence of the problem, except for\
+            \ purposes of localization."
+          type: string
+        status:
+          description: The HTTP status code.
+          maximum: 599
+          minimum: 400
+          type: integer
+        detail:
+          description: A human-readable explanation specific to this occurrence of
+            the problem.
+          type: string
+        instance:
+          description: A URI reference that identifies the specific occurrence of
+            the problem.  It may or may not yield further information if dereferenced.
+          type: string
+      type: object
+    customer_address_patch:
+      nullable: true
+      properties:
+        id:
+          description: Unique identifier representing a specific customer address
+          format: uuid
+          type: string
+        addressLine1:
+          description: Address Line 1
+          example: 123 Main Street
+          maxLength: 100
+          minLength: 3
+          nullable: true
+          type: string
+        addressLine2:
+          description: Address Line 2
+          maxLength: 100
+          minLength: 3
+          nullable: true
+          type: string
+        city:
+          description: City
+          example: St Petersburg
+          maxLength: 100
+          minLength: 2
+          nullable: true
+          type: string
+        state:
+          description: 2 character state code
+          example: FL
+          maxLength: 2
+          minLength: 2
+          nullable: true
+          type: string
+        zip:
+          description: Zip Code
+          example: "33701"
+          maxLength: 10
+          minLength: 5
+          nullable: true
+          type: string
+      required:
+      - id
+      type: object
+    customer_payment_method_patch:
+      properties:
+        id:
+          description: Unique identifier representing a specific payment method.
+          format: uuid
+          type: string
+        displayName:
+          example: My Chase Card
+          maxLength: 100
+          minLength: 2
+          nullable: true
+          type: string
+        cardNumber:
+          example: 1234567890123456
+          nullable: true
+          type: integer
+        expiryMonth:
+          example: 7
+          nullable: true
+          type: integer
+        expiryYear:
+          example: 26
+          nullable: true
+          type: integer
+        cvv:
+          example: 123
+          nullable: true
+          type: integer
+      required:
+      - id
+      type: object
+    customer_patch:
+      properties:
+        id:
+          description: System generated unique identifier for the resource.
+          format: uuid
+          nullable: true
+          readOnly: true
+          type: string
+        name:
+          $ref: '#/components/schemas/name'
+        shipToAddress:
+          $ref: '#/components/schemas/customer_address_patch'
+        billToAddress:
+          $ref: '#/components/schemas/customer_address_patch'
+        email:
+          example: john@springframework.guru
+          maxLength: 255
+          minLength: 3
+          nullable: true
+          type: string
+        phone:
+          example: 800-555-1212
+          maxLength: 15
+          minLength: 7
+          nullable: true
+          type: string
+        paymentMethods:
+          items:
+            $ref: '#/components/schemas/customer_payment_method_patch'
+          nullable: true
+          type: array
+      type: object
+    dimensions:
+      description: The dimentions of the product
+      example:
+        length: 10
+        width: 10
+        height: 10
+      properties:
+        length:
+          description: The length of the product
+          example: 10
+          maximum: 999
+          minimum: 1
+          type: integer
+        width:
+          description: The width of the product
+          example: 10
+          maximum: 999
+          minimum: 1
+          type: integer
+        height:
+          description: The height of the product
+          example: 10
+          maximum: 999
+          minimum: 1
+          type: integer
+      required:
+      - height
+      - length
+      - width
+      type: object
+    category:
+      example:
+        dateCreated: 2022-08-22T11:43:06-07:00
+        category_code: ELECTRONICS
+        description: Electronics and Gadgets
+        id: null
+        category: Electronics
+        dateUpdated: 2022-08-22T11:43:06-07:00
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid_id'
+        category:
+          description: The category of the product
+          example: Electronics
+          maxLength: 25
+          minLength: 3
+          type: string
+        description:
+          description: The description of the category
+          example: Electronics and Gadgets
+          maxLength: 255
+          minLength: 3
+          type: string
+        category_code:
+          description: The category code of the product
+          example: ELECTRONICS
+          maxLength: 25
+          minLength: 3
+          type: string
+        dateCreated:
+          $ref: '#/components/schemas/iso_timestamp'
+        dateUpdated:
+          $ref: '#/components/schemas/iso_timestamp'
+      required:
+      - category
+      - category_code
+      - description
+      type: object
+    image:
+      example:
+        dateCreated: 2022-08-22T11:43:06-07:00
+        altText: altText
+        id: null
+        url: https://springframework.guru/wp-content/uploads/2019/08/spring-framework-guru-logo.jpg
+        dateUpdated: 2022-08-22T11:43:06-07:00
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid_id'
+        url:
+          description: The url of the image
+          example: https://springframework.guru/wp-content/uploads/2019/08/spring-framework-guru-logo.jpg
+          format: url
+          maxLength: 500
+          minLength: 5
+          type: string
+        altText:
+          maxLength: 255
+          minLength: 3
+          nullable: true
+          type: string
+        dateCreated:
+          $ref: '#/components/schemas/iso_timestamp'
+        dateUpdated:
+          $ref: '#/components/schemas/iso_timestamp'
+      required:
+      - url
+      type: object
+    product:
+      example:
+        images:
+        - dateCreated: 2022-08-22T11:43:06-07:00
+          altText: altText
+          id: null
+          url: https://springframework.guru/wp-content/uploads/2019/08/spring-framework-guru-logo.jpg
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        - dateCreated: 2022-08-22T11:43:06-07:00
+          altText: altText
+          id: null
+          url: https://springframework.guru/wp-content/uploads/2019/08/spring-framework-guru-logo.jpg
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        cost: cost
+        dateCreated: 2022-08-22T11:43:06-07:00
+        price: price
+        description: description
+        id: null
+        categories:
+        - dateCreated: 2022-08-22T11:43:06-07:00
+          category_code: ELECTRONICS
+          description: Electronics and Gadgets
+          id: null
+          category: Electronics
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        - dateCreated: 2022-08-22T11:43:06-07:00
+          category_code: ELECTRONICS
+          description: Electronics and Gadgets
+          id: null
+          category: Electronics
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        dimensions:
+          length: 10
+          width: 10
+          height: 10
+        dateUpdated: 2022-08-22T11:43:06-07:00
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid_id'
+        description:
+          description: The description of the product
+          maxLength: 255
+          minLength: 3
+          type: string
+        dimensions:
+          $ref: '#/components/schemas/dimensions'
+        categories:
+          items:
+            $ref: '#/components/schemas/category'
+          type: array
+        images:
+          items:
+            $ref: '#/components/schemas/image'
+          type: array
+        price:
+          pattern: "^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$"
+          type: string
+        cost:
+          pattern: "^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$"
+          type: string
+        dateCreated:
+          $ref: '#/components/schemas/iso_timestamp'
+        dateUpdated:
+          $ref: '#/components/schemas/iso_timestamp'
+      required:
+      - description
+      - price
+      type: object
+    product_list:
+      items:
+        $ref: '#/components/schemas/product'
+      type: array
+    product_create:
+      properties:
+        description:
+          description: The description of the product
+          maxLength: 255
+          minLength: 3
+          type: string
+        dimensions:
+          $ref: '#/components/schemas/dimensions'
+        categories:
+          description: The category codes for the product
+          items:
+            type: string
+          type: array
+        images:
+          items:
+            $ref: '#/components/schemas/image'
+          type: array
+        price:
+          pattern: "^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$"
+          type: string
+        cost:
+          pattern: "^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$"
+          type: string
+      required:
+      - description
+      - price
+      type: object
+    product_image_update:
+      properties:
+        id:
+          description: The unique identifier of the image
+          format: uuid
+          nullable: true
+          type: string
+        url:
+          description: The url of the image
+          example: https://host/image.jpg
+          format: url
+          maxLength: 500
+          minLength: 5
+          type: string
+        altText:
+          maxLength: 255
+          minLength: 3
+          nullable: true
+          type: string
+      required:
+      - id
+      - url
+      type: object
+    product_update:
+      properties:
+        description:
+          description: The description of the product
+          maxLength: 255
+          minLength: 3
+          type: string
+        dimensions:
+          $ref: '#/components/schemas/dimensions'
+        categories:
+          description: The category codes for the product
+          items:
+            type: string
+          type: array
+        images:
+          items:
+            $ref: '#/components/schemas/product_image_update'
+          type: array
+        price:
+          pattern: "^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$"
+          type: string
+        cost:
+          pattern: "^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$"
+          type: string
+      required:
+      - description
+      - price
+      type: object
+    product_dimensions_patch:
+      description: The dimentions of the product
+      properties:
+        length:
+          description: The length of the product
+          example: 10
+          maximum: 999
+          minimum: 1
+          nullable: true
+          type: integer
+        width:
+          description: The width of the product
+          example: 10
+          maximum: 999
+          minimum: 1
+          nullable: true
+          type: integer
+        height:
+          description: The height of the product
+          example: 10
+          maximum: 999
+          minimum: 1
+          nullable: true
+          type: integer
+      type: object
+    product_image_patch:
+      properties:
+        id:
+          description: The unique identifier of the image
+          format: uuid
+          type: string
+        url:
+          description: The url of the image
+          example: https://host/image.jpg
+          format: url
+          maxLength: 500
+          minLength: 5
+          nullable: true
+          type: string
+        altText:
+          maxLength: 255
+          minLength: 3
+          nullable: true
+          type: string
+      required:
+      - id
+      type: object
+    product_patch:
+      properties:
+        description:
+          description: The description of the product
+          maxLength: 255
+          minLength: 3
+          nullable: true
+          type: string
+        dimensions:
+          $ref: '#/components/schemas/product_dimensions_patch'
+        categories:
+          description: The category codes for the product
+          items:
+            type: string
+          nullable: true
+          type: array
+        images:
+          items:
+            $ref: '#/components/schemas/product_image_patch'
+          nullable: true
+          type: array
+        price:
+          nullable: true
+          pattern: "^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$"
+          type: string
+        cost:
+          nullable: true
+          pattern: "^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$"
+          type: string
+      type: object
+    order_customer:
+      example:
+        shipToAddress:
+          zip: "33701"
+          dateCreated: 2022-08-22T11:43:06-07:00
+          city: St Petersburg
+          addressLine1: 123 Main Street
+          addressLine2: addressLine2
+          id: null
+          state: FL
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        billToAddress:
+          zip: "33701"
+          dateCreated: 2022-08-22T11:43:06-07:00
+          city: St Petersburg
+          addressLine1: 123 Main Street
+          addressLine2: addressLine2
+          id: null
+          state: FL
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        phone: phone
+        selectedPaymentMethod:
+          cvv: 123
+          dateCreated: 2022-08-22T11:43:06-07:00
+          displayName: My Chase Card
+          expiryMonth: 7
+          id: null
+          expiryYear: 26
+          cardNumber: 1234567890123456
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        name:
+          firstName: John
+          lastName: Doe
+          prefix: Mr.
+          suffix: suffix
+        id: null
+        email: email
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid_id'
+        name:
+          $ref: '#/components/schemas/name'
+        shipToAddress:
+          $ref: '#/components/schemas/address'
+        billToAddress:
+          $ref: '#/components/schemas/address'
+        email:
+          description: The email address of the customer
+          nullable: true
+          type: string
+        phone:
+          description: The phone number of the customer
+          type: string
+        selectedPaymentMethod:
+          $ref: '#/components/schemas/payment_method'
+      type: object
+    order_product:
+      example:
+        price: price
+        description: description
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          description: The unique identifier of the product
+          format: uuid
+          type: string
+        description:
+          description: The description of the product
+          type: string
+        price:
+          pattern: "^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$"
+          type: string
+      type: object
+    order_line:
+      example:
+        product:
+          price: price
+          description: description
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        dateCreated: 2022-08-22T11:43:06-07:00
+        id: null
+        orderQuantity: 2
+        shipQuantity: 2
+        dateUpdated: 2022-08-22T11:43:06-07:00
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid_id'
+        product:
+          $ref: '#/components/schemas/order_product'
+        orderQuantity:
+          description: The quantity of the product in the order
+          example: 2
+          maximum: 10000
+          minimum: 1
+          type: integer
+        shipQuantity:
+          description: The quantity of the product shipped
+          example: 2
+          maximum: 10000
+          minimum: 1
+          nullable: true
+          type: integer
+        dateCreated:
+          $ref: '#/components/schemas/iso_timestamp'
+        dateUpdated:
+          $ref: '#/components/schemas/iso_timestamp'
+      required:
+      - orderQuantity
+      - product
+      type: object
+    order:
+      example:
+        dateCreated: 2022-08-22T11:43:06-07:00
+        orderLines:
+        - product:
+            price: price
+            description: description
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          dateCreated: 2022-08-22T11:43:06-07:00
+          id: null
+          orderQuantity: 2
+          shipQuantity: 2
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        - product:
+            price: price
+            description: description
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          dateCreated: 2022-08-22T11:43:06-07:00
+          id: null
+          orderQuantity: 2
+          shipQuantity: 2
+          dateUpdated: 2022-08-22T11:43:06-07:00
+        orderStatus: NEW
+        id: null
+        shipmentInfo: shipmentInfo
+        customer:
+          shipToAddress:
+            zip: "33701"
+            dateCreated: 2022-08-22T11:43:06-07:00
+            city: St Petersburg
+            addressLine1: 123 Main Street
+            addressLine2: addressLine2
+            id: null
+            state: FL
+            dateUpdated: 2022-08-22T11:43:06-07:00
+          billToAddress:
+            zip: "33701"
+            dateCreated: 2022-08-22T11:43:06-07:00
+            city: St Petersburg
+            addressLine1: 123 Main Street
+            addressLine2: addressLine2
+            id: null
+            state: FL
+            dateUpdated: 2022-08-22T11:43:06-07:00
+          phone: phone
+          selectedPaymentMethod:
+            cvv: 123
+            dateCreated: 2022-08-22T11:43:06-07:00
+            displayName: My Chase Card
+            expiryMonth: 7
+            id: null
+            expiryYear: 26
+            cardNumber: 1234567890123456
+            dateUpdated: 2022-08-22T11:43:06-07:00
+          name:
+            firstName: John
+            lastName: Doe
+            prefix: Mr.
+            suffix: suffix
+          id: null
+          email: email
+        dateUpdated: 2022-08-22T11:43:06-07:00
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid_id'
+        customer:
+          $ref: '#/components/schemas/order_customer'
+        orderStatus:
+          default: NEW
+          enum:
+          - NEW
+          - HOLD
+          - SHIPPED
+          - DELIVERED
+          - CLOSED
+          type: string
+        shipmentInfo:
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          type: string
+        orderLines:
+          description: The order lines of the order
+          items:
+            $ref: '#/components/schemas/order_line'
+          type: array
+        dateCreated:
+          $ref: '#/components/schemas/iso_timestamp'
+        dateUpdated:
+          $ref: '#/components/schemas/iso_timestamp'
+      required:
+      - customer
+      - orderLines
+      - orderStatus
+      type: object
+    order_list:
+      items:
+        $ref: '#/components/schemas/order'
+      type: array
+    order_line_create:
+      properties:
+        productId:
+          format: uuid
+          type: string
+        orderQuantity:
+          example: 2
+          format: int32
+          maximum: 1000
+          minimum: 1
+          type: integer
+      required:
+      - orderQuantity
+      - productId
+      type: object
+    order_create:
+      properties:
+        customerId:
+          format: uuid
+          type: string
+        selectPaymentMethodId:
+          format: uuid
+          nullable: true
+          type: string
+        orderLines:
+          description: The order lines of the order
+          items:
+            $ref: '#/components/schemas/order_line_create'
+          nullable: true
+          type: array
+      required:
+      - customerId
+      type: object
+    order_line_update:
+      properties:
+        id:
+          description: The unique identifier of the order line
+          format: uuid
+          type: string
+        productId:
+          format: uuid
+          type: string
+        orderQuantity:
+          example: 2
+          format: int32
+          maximum: 1000
+          minimum: 1
+          type: integer
+      required:
+      - id
+      - orderQuantity
+      - productId
+      type: object
+    order_update:
+      properties:
+        customerId:
+          format: uuid
+          type: string
+        selectPaymentMethodId:
+          format: uuid
+          nullable: true
+          type: string
+        orderLines:
+          description: The order lines of the order
+          items:
+            $ref: '#/components/schemas/order_line_update'
+          nullable: true
+          type: array
+      required:
+      - customerId
+      type: object
+    order_line_patch:
+      nullable: true
+      properties:
+        id:
+          description: The unique identifier of the order line
+          format: uuid
+          type: string
+        productId:
+          format: uuid
+          nullable: true
+          type: string
+        orderQuantity:
+          example: 2
+          format: int32
+          maximum: 1000
+          minimum: 1
+          nullable: true
+          type: integer
+      required:
+      - id
+      type: object
+    order_patch:
+      properties:
+        customerId:
+          format: uuid
+          nullable: true
+          type: string
+        selectPaymentMethodId:
+          format: uuid
+          nullable: true
+          type: string
+        orderLines:
+          description: The order lines of the order
+          items:
+            $ref: '#/components/schemas/order_line_patch'
+          nullable: true
+          type: array
+      type: object
+    category_list:
+      items:
+        $ref: '#/components/schemas/category'
+      type: array
+  securitySchemes:
+    main_auth:
+      flows:
+        implicit:
+          authorizationUrl: http://example.com/api/oauth/dialog
+          scopes:
+            read:users: read users info
+            write:users: modify or remove users
+      type: oauth2
+    api_key:
+      in: header
+      name: api_key
+      type: apiKey
+    basic_auth:
+      scheme: basic
+      type: http
+
